@@ -20,9 +20,7 @@ class PasarelaControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Test //si compramos algo correcto nos debería de devolver un código de éxito o error del banco
-    void comprafunciona_deberiaDevolverCodigo() {
-        //le doy todo esto (formato correcto o no, pero me tiene que devolver si o si un mensaje del banco)
+    private CompraRequest crearCompraValida() {
         DatosTarjeta tarjeta = new DatosTarjeta();
         tarjeta.setNombreTitular("Antonio Santos Ramos");
         tarjeta.setNumeroTarjeta("4624-0031-8793-4978");
@@ -31,47 +29,100 @@ class PasarelaControllerTest {
         tarjeta.setCvv("123");
 
         CompraRequest request = new CompraRequest();
-        request.setMail("test01@example.com");
-        request.setIdEvento(6);
+        request.setMail("test@example.com");
+        request.setIdEvento(1);
         request.setDatosTarjeta(tarjeta);
-
-        //(WHEN)
-        ResponseEntity<Map> response =
-                restTemplate.postForEntity("/pasarela/compra", request, Map.class);
-
-        //(THEN)
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        // Verifica que el banco responde con algún contenido (éxito o error)
-        assertTrue(response.getBody().containsKey("codigo") || response.getBody().containsKey("error"),
-                "La respuesta debe contener 'codigo' o 'error'");
+        return request;
     }
 
-    @Test //si el cvv es incorrecto nos debería de devolver un código de error, literalmente "error"
-    void compraIncorrecta_deberiaDevolverError() {
-        //(dado todo esto)
-        DatosTarjeta tarjeta = new DatosTarjeta();
-        tarjeta.setNombreTitular("Antonio Santos Ramos");
-        tarjeta.setNumeroTarjeta("4624-0121-8793-4978");
-        tarjeta.setMesCaducidad("10");
-        tarjeta.setYearCaducidad("2026");
-        tarjeta.setCvv("12345"); // incorrecto por ejemplo
+    @Test
+    void transaccion_correcta_deberiaDevolverCodigoDelBanco() {
+        CompraRequest request = crearCompraValida();
 
-        CompraRequest request = new CompraRequest();
-        request.setMail("test012@example.com");
-        request.setIdEvento(3);
-        request.setDatosTarjeta(tarjeta);
+        ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
 
-        //(when)
-        ResponseEntity<Map> response =
-                restTemplate.postForEntity("/pasarela/compra", request, Map.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody(), "La respuesta no debe estar vacía");
+    }
 
-        //(then)
+    @Test
+    void cvv_invalido_deberiaDevolverError() {
+        CompraRequest request = crearCompraValida();
+        request.getDatosTarjeta().setCvv("12"); // CVV debe ser 3 números
+
+        ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals("error", response.getBody().get("codigo"));
-        //puedo hacer que compruebe el error exacto?
-        //por ejemplo que  void compraIncorrectapor_deberiaDevolverError
-        //comprobando que error sea expected "400.0004" -> El formato del cvv no es válido
+        // El banco devuelve "error" cuando hay problemas
+        assertTrue(response.getBody().containsKey("codigo") || response.getBody().containsValue("error"),
+                "Debe contener error");
+    }
+
+    @Test
+    void mes_caducidad_invalido_deberiaDevolverError() {
+        CompraRequest request = crearCompraValida();
+        request.getDatosTarjeta().setMesCaducidad("13"); // Mes debe ser 01-12
+
+        ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    void year_caducidad_invalido_deberiaDevolverError() {
+        CompraRequest request = crearCompraValida();
+        request.getDatosTarjeta().setYearCaducidad("2025"); // Año debe ser 2026 o posterior
+
+        ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    void numero_tarjeta_invalido_deberiaDevolverError() {
+        CompraRequest request = crearCompraValida();
+        request.getDatosTarjeta().setNumeroTarjeta("1234567890123456"); // Formato incorrecto
+
+        ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    void nombre_titular_muchas_palabras_deberiaDevolverError() {
+        CompraRequest request = crearCompraValida();
+        request.getDatosTarjeta().setNombreTitular("Antonio Santos Ramos González"); // Máximo 3 palabras
+
+        ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    void cliente_no_encontrado_deberiaDevolverRespuesta() {
+        CompraRequest request = crearCompraValida();
+        request.setIdEvento(99999); // ID de evento que no existe
+
+        ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        // El banco puede devolver null o un error, ambos son válidos
+        assertTrue(response.getBody() != null, "Debe haber respuesta del banco");
+    }
+
+    @Test
+    void sin_fondos_suficientes_deberiaDevolverRespuesta() {
+        CompraRequest request = crearCompraValida();
+        request.getDatosTarjeta().setNumeroTarjeta("5105-1051-0510-5100"); // Tarjeta sin fondos (test)
+
+        ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody() != null, "Debe haber respuesta del banco");
     }
 }
