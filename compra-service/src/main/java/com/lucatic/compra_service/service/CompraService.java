@@ -39,12 +39,12 @@ public class CompraService {
             Map<String, Object> respuesta = restTemplate.postForObject(
                 URL_BANCO,
                 datosBanco,
-                Map.class
+                Map.class  
             );
             return respuesta;
                 } catch (Exception e) {
                     return Map.of(
-                        "codigo", "500.LOCAL",
+                        "codigo", "error",
                         "descripcion", "Error al contactar con el banco: " + e.getMessage()
                     );
                 }
