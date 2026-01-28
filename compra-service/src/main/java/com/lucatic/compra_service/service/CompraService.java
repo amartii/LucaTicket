@@ -1,14 +1,16 @@
 package com.lucatic.compra_service.service;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 import com.lucatic.compra_service.dto.CompraRequest;
 import com.lucatic.compra_service.dto.DatosPagoBanco;
 import com.lucatic.compra_service.dto.DatosTarjeta;
-import java.util.Map;
 
 @Service
-public class CompraService {
+public class CompraService implements ICompraService {
 
     private static final String URL_BANCO = "http://lucabanking.us-east-1.elasticbeanstalk.com/pasarela/compra";
 
