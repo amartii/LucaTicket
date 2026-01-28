@@ -5,7 +5,6 @@ import org.springframework.web.client.RestTemplate;
 import com.lucatic.compra_service.dto.CompraRequest;
 import com.lucatic.compra_service.dto.DatosPagoBanco;
 import com.lucatic.compra_service.dto.DatosTarjeta;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
