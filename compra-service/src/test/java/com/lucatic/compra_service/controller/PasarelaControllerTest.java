@@ -1,9 +1,10 @@
 package com.lucatic.compra_service.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,13 +49,13 @@ class PasarelaControllerTest {
     @Test
     void cvv_invalido_deberiaDevolverError() {
         CompraRequest request = crearCompraValida();
-        request.getDatosTarjeta().setCvv("12"); // CVV debe ser 3 números
+        request.getDatosTarjeta().setCvv("12"); // tiene que ser 3 números (pongo 2)
 
         ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        // El banco devuelve "error" cuando hay problemas
+        // El banco devuelve "error" cuando hay problemas (mensaje añadido en el servicio)
         assertTrue(response.getBody().containsKey("codigo") || response.getBody().containsValue("error"),
                 "Debe contener error");
     }
