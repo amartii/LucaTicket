@@ -1,0 +1,24 @@
+/* App Global Wrapper */
+.app-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  background: #0f1419;
+  color: #e8eef5;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Transiciones globales */
+router-outlet + * {
+  animation: pageEnter 0.3s ease-in-out;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

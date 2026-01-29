@@ -1,1 +1,112 @@
-/* You can add global styles to this file, and also import other style files */
+/* Importar Poppins font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* Variables de color tema oscuro */
+$bg-dark: #0f1419;
+$bg-card: #1a1f2e;
+$bg-hover: #242b3f;
+$text-primary: #e8eef5;
+$text-secondary: #a8b5cc;
+$accent-primary: #4a7cff;
+$accent-secondary: #357abd;
+$accent-light: #6ba3ff;
+$border-color: #2a3447;
+$success: #4ade80;
+$warning: #f97316;
+
+/* Reset y variables globales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background: $bg-dark;
+  color: $text-primary;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $bg-dark;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $accent-secondary;
+  border-radius: 4px;
+
+  &:hover {
+    background: $accent-light;
+  }
+}
+
+/* Tipografía global */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: $text-primary;
+}
+
+p {
+  color: $text-secondary;
+}
+
+a {
+  color: $accent-primary;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $accent-light;
+  }
+}
+
+/* Botones globales */
+button {
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* Input campos */
+input, textarea, select {
+  font-family: 'Poppins', sans-serif;
+  background: $bg-card;
+  color: $text-primary;
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $accent-primary;
+    box-shadow: 0 0 0 3px rgba(74, 124, 255, 0.1);
+  }
+
+  &::placeholder {
+    color: $text-secondary;
+  }
+}

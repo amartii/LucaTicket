@@ -63,7 +63,7 @@ class PasarelaControllerTest {
     @Test
     void mes_caducidad_invalido_deberiaDevolverError() {
         CompraRequest request = crearCompraValida();
-        request.getDatosTarjeta().setMesCaducidad("13"); // Mes debe ser 01-12
+        request.getDatosTarjeta().setMesCaducidad("13"); // Mes tiene que ser 01-12
 
         ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
 
@@ -74,7 +74,7 @@ class PasarelaControllerTest {
     @Test
     void year_caducidad_invalido_deberiaDevolverError() {
         CompraRequest request = crearCompraValida();
-        request.getDatosTarjeta().setYearCaducidad("2025"); // Año debe ser 2026 o posterior
+        request.getDatosTarjeta().setYearCaducidad("2025"); // Año tiene que ser >= al actual (2026)
 
         ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
 
@@ -85,7 +85,7 @@ class PasarelaControllerTest {
     @Test
     void numero_tarjeta_invalido_deberiaDevolverError() {
         CompraRequest request = crearCompraValida();
-        request.getDatosTarjeta().setNumeroTarjeta("1234567890123456"); // Formato incorrecto
+        request.getDatosTarjeta().setNumeroTarjeta("1234567890123456"); // Formato incorrecto, tiene que ser xxxx-xxxx-xxxx-xxxx
 
         ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
 
@@ -96,7 +96,7 @@ class PasarelaControllerTest {
     @Test
     void nombre_titular_muchas_palabras_deberiaDevolverError() {
         CompraRequest request = crearCompraValida();
-        request.getDatosTarjeta().setNombreTitular("Antonio Santos Ramos González"); // Máximo 3 palabras
+        request.getDatosTarjeta().setNombreTitular("Antonio Santos Ramos González"); // Máximo 3 palabras (fuerzo y pongo 4)
 
         ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
 
@@ -119,7 +119,7 @@ class PasarelaControllerTest {
     @Test
     void sin_fondos_suficientes_deberiaDevolverRespuesta() {
         CompraRequest request = crearCompraValida();
-        request.getDatosTarjeta().setNumeroTarjeta("5105-1051-0510-5100"); // Tarjeta sin fondos (test)
+        request.getDatosTarjeta().setNumeroTarjeta("5105-1051-0510-5100"); // Tarjeta sin fondos (test), cuando hacemos muchos posts se nos acaba quedando sin dinero
 
         ResponseEntity<Map> response = restTemplate.postForEntity("/pasarela/compra", request, Map.class);
 

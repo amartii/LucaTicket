@@ -1,0 +1,124 @@
+/* Variables */
+$bg-dark: #0f1419;
+$bg-card: #1a1f2e;
+$text-primary: #e8eef5;
+$text-secondary: #a8b5cc;
+$warning: #f97316;
+
+.compras-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $bg-dark 0%, $bg-card 100%);
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.mensaje-wrapper {
+  background: $bg-card;
+  border-radius: 12px;
+  padding: 4rem 2rem;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-left: 5px solid $warning;
+  animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.icono {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: $warning;
+  animation: fadeInScale 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @keyframes fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: $text-primary;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+p {
+  color: $text-secondary;
+  font-size: 1rem;
+  margin: 0.75rem 0;
+  line-height: 1.6;
+
+  &.subtexto {
+    font-size: 0.9rem;
+    color: $text-secondary;
+    opacity: 0.8;
+    margin-top: 1rem;
+  }
+}
+
+.btn-volver {
+  margin-top: 2.5rem;
+  padding: 0.9rem 2rem;
+  background: linear-gradient(135deg, $warning 0%, #ea580c 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+  font-family: 'Poppins', sans-serif;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(249, 115, 22, 0.5);
+    background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .mensaje-wrapper {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .icono {
+    font-size: 3rem;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+}

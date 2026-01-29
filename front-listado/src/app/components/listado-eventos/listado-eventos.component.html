@@ -1,0 +1,64 @@
+<div class="eventos-container">
+  <div class="header">
+    <h2>🎭 Listado de Eventos</h2>
+    <p class="subtitle">Descubre todos nuestros eventos y compra tus entradas</p>
+  </div>
+
+  <div *ngIf="eventos.length === 0" class="empty-state">
+    <p>⏳ Cargando eventos...</p>
+  </div>
+
+  <div *ngIf="eventos.length > 0" class="eventos-accordion">
+    <div
+      *ngFor="let e of eventos"
+      class="evento-card"
+      [class.expanded]="eventoExpandido === e.id"
+      (click)="toggleEvento(e.id)"
+    >
+      <!-- Header colapsable -->
+      <div class="evento-header">
+        <div class="evento-titulo">
+          <h3>{{ e.nombre }}</h3>
+          <span class="evento-genero">{{ e.genero }}</span>
+        </div>
+        <div class="evento-info-quick">
+          <span class="evento-localidad">📍 {{ e.localidad }}</span>
+          <span class="evento-precio">💰 {{ e.precioMinimo | number: '1.0-0' }}€ - {{ e.precioMaximo | number: '1.0-0' }}€</span>
+        </div>
+      </div>
+
+      <!-- Contenido expandible -->
+      <div class="evento-content" *ngIf="eventoExpandido === e.id">
+        <img
+          [src]="'assets/eventos/' + (e.foto.replace('.jpg', '.svg') || 'placeholder.svg')"
+          [alt]="e.nombre"
+          class="evento-imagen"
+          onerror="this.src='assets/eventos/evento_01.svg'"
+        />
+        <p class="evento-descripcion">{{ e.descripcion }}</p>
+
+        <div class="evento-info-grid">
+          <div class="info-item">
+            <label>📅 Fecha</label>
+            <span>{{ e.fechaEvento }}</span>
+          </div>
+          <div class="info-item">
+            <label>🕐 Hora</label>
+            <span>{{ e.horaEvento }}</span>
+          </div>
+          <div class="info-item">
+            <label>🏛️ Recinto</label>
+            <span>{{ e.recinto }}</span>
+          </div>
+          <div class="info-item">
+            <label>🏙️ Localidad</label>
+            <span>{{ e.localidad }}</span>
+          </div>
+        </div>
+
+        <div class="evento-acciones">
+          <button class="btn-comprar" (click)="irAComprar()">🎫 Comprar Entradas</button>
+          <button class="btn-favorito" (click)="irAFavoritos()">❤️ Añadir a Favoritos</button>
+    </div>
+  </div>
+</div>
