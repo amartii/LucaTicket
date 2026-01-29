@@ -57,10 +57,11 @@ $border-color: #2a3447;
 
 /* Acordeón */
 .eventos-accordion {
-  display: flex;
-  flex-direction: column;
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
   gap: 1rem;
   padding: 0;
+  width: 100%;
   animation: fadeInUp 0.5s ease-out;
 
   @keyframes fadeInUp {
@@ -84,6 +85,8 @@ $border-color: #2a3447;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-left: 4px solid $accent-primary;
   animation: slideIn 0.4s ease-out;
+  display: flex;
+  flex-direction: column;
 
   @keyframes slideIn {
     from {
@@ -103,6 +106,7 @@ $border-color: #2a3447;
   &.expanded {
     box-shadow: 0 8px 24px rgba(74, 124, 255, 0.25);
     border-left-color: $accent-light;
+    grid-column: span 2;
   }
 }
 

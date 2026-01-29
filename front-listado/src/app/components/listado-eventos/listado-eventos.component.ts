@@ -16,7 +16,7 @@ export class ListadoEventosComponent implements OnInit {
   eventos: Evento[] = [];
   eventoExpandido: number | null = null;
 
-  constructor(private eventosService: EventosService, private cdr: ChangeDetectorRef, private router: Router) { }
+  constructor(private eventosService: EventosService, private router: Router, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.cargarEventos();
@@ -24,6 +24,12 @@ export class ListadoEventosComponent implements OnInit {
 
   toggleEvento(id: number): void {
     this.eventoExpandido = this.eventoExpandido === id ? null : id;
+  }
+
+  getImagenEvento(id: number): string {
+    // Mapea el ID del evento a su imagen correspondiente (evento01.png a evento12.png)
+    const numeroEvento = String(id).padStart(2, '0');
+    return `assets/eventos/evento${numeroEvento}.png`;
   }
 
   irAFavoritos(): void {
@@ -37,8 +43,6 @@ export class ListadoEventosComponent implements OnInit {
   cargarEventos(): void {
     this.eventosService.getEventos().subscribe({
       next: (data) => {
-        console.log('Datos recibidos:', data);
-        console.log('Longitud del array:', data.length);
         this.eventos = data;
         this.cdr.detectChanges();
       },

@@ -13,7 +13,6 @@ export class EventosService {
   constructor(private http: HttpClient) { }
 
   getEventos(): Observable<Evento[]> {
-    console.log('Llamando a:', this.baseUrl);
     return this.http.get<Evento[]>(this.baseUrl);
   }
 }
