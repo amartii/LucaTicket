@@ -1,19 +1,64 @@
-# ==================================
-# Configuracion para Circuit Breaker 
-# ==================================
+# ============================================
+# CONFIGURACIÓN DE RESILIENCE4J CIRCUIT BREAKER
+# ============================================
 
-resilience4j.circuitbreaker:
+resilience4j:
+  circuitbreaker:
     instances:
-# Registramos el nombre que daremos al Circuit Breaker
-# Si tuvieramos mas microservicios a los que llamaramos desde este
-# se incluirian nuevas lineas con ese mismo formato   
-# esta info esta copiada de https://resilience4j.readme.io/docs/getting-started-3      
-        productCB:
-            registerHealthIndicator: true
-            slidingWindowSize: 10
-            permittedNumberOfCallsInHalfOpenState: 3
-            slidingWindowType: TIME_BASED
-            minimumNumberOfCalls: 4
-            waitDurationInOpenState: 5s
-            failureRateThreshold: 50
-            eventConsumerBufferSize: 10
+      # Circuit Breaker para el servicio de Eventos
+      eventosServiceCB:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: TIME_BASED
+        minimumNumberOfCalls: 4
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        slowCallRateThreshold: 100
+        slowCallDurationThreshold: 2s
+        recordExceptions:
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+          - org.springframework.web.client.HttpClientErrorException
+          - org.springframework.web.client.HttpServerErrorException
+
+      # Circuit Breaker para el servicio de Compras
+      compraServiceCB:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: TIME_BASED
+        minimumNumberOfCalls: 4
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        slowCallRateThreshold: 100
+        slowCallDurationThreshold: 2s
+        recordExceptions:
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+          - org.springframework.web.client.HttpClientErrorException
+          - org.springframework.web.client.HttpServerErrorException
+
+  # Configuración de Retry (reintentos)
+  retry:
+    instances:
+      eventosServiceCB:
+        max-attempts: 3
+        wait-duration: 1000
+
+      compraServiceCB:
+        max-attempts: 3
+        wait-duration: 1000
+
+  # Configuración de Timeout
+  timelimiter:
+    instances:
+      eventosServiceCB:
+        timeout-duration: 5s
+        cancel-running-future: true
+
+      compraServiceCB:
+        timeout-duration: 5s
+        cancel-running-future: true

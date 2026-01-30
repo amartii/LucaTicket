@@ -52,6 +52,26 @@
             "projectName": "luca-gateway",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-Spring19dCartCircuitBreakerApplication<Spring19d-CartCircuitBreaker>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.ejemplos.spring.Spring19dCartCircuitBreakerApplication",
+            "projectName": "Spring19d-CartCircuitBreaker",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CircuitBreakerApplication<luca-circuitbreaker>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.lucatic.circuitbreaker.CircuitBreakerApplication",
+            "projectName": "luca-circuitbreaker",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

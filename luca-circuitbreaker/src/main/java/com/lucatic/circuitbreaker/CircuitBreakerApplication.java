@@ -1,17 +1,19 @@
-package com.ejemplos.spring;
+package com.lucatic.circuitbreaker;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-public class Spring19dCartCircuitBreakerApplication {
+@EnableAspectJAutoProxy
+public class CircuitBreakerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Spring19dCartCircuitBreakerApplication.class, args);
+		SpringApplication.run(CircuitBreakerApplication.class, args);
 	}
 
 }
