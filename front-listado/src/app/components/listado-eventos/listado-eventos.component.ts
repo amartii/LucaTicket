@@ -15,6 +15,8 @@ export class ListadoEventosComponent implements OnInit {
 
   eventos: Evento[] = [];
   eventoExpandido: number | null = null;
+  loading = false;
+  errorMessage = '';
 
   constructor(private eventosService: EventosService, private router: Router, private cdr: ChangeDetectorRef) { }
 
@@ -40,13 +42,46 @@ export class ListadoEventosComponent implements OnInit {
     this.router.navigate(['/compras']);
   }
 
+  crearEvento(): void {
+    this.router.navigate(['/eventos/nuevo']);
+  }
+
+  editarEvento(id: number, event: Event): void {
+    event.stopPropagation();
+    this.router.navigate(['/eventos', id, 'editar']);
+  }
+
+  borrarEvento(id: number, event: Event): void {
+    event.stopPropagation();
+    const evento = this.eventos.find(e => e.id === id);
+    if (evento && confirm(`¿Estás seguro de que deseas eliminar "${evento.nombre}"?`)) {
+      this.eventosService.deleteEvento(id).subscribe({
+        next: () => {
+          this.cargarEventos();
+        },
+        error: (err) => {
+          console.error('Error al borrar evento', err);
+          this.errorMessage = 'Error al borrar el evento. Intenta nuevamente.';
+        }
+      });
+    }
+  }
+
   cargarEventos(): void {
+    this.loading = true;
+    this.errorMessage = '';
     this.eventosService.getEventos().subscribe({
       next: (data) => {
         this.eventos = data;
+        this.loading = false;
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error cargando eventos', err)
+      error: (err) => {
+        console.error('Error cargando eventos', err);
+        this.errorMessage = 'Error al cargar los eventos. Intenta nuevamente.';
+        this.loading = false;
+      }
     });
   }
 }
+

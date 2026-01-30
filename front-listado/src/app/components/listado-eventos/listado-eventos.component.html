@@ -1,11 +1,24 @@
 <div class="eventos-container">
   <div class="header">
-    <h2>🎭 Listado de Eventos</h2>
-    <p class="subtitle">Descubre todos nuestros eventos y compra tus entradas</p>
+    <div class="header-title">
+      <h2>🎭 Listado de Eventos</h2>
+      <p class="subtitle">Descubre todos nuestros eventos y compra tus entradas</p>
+    </div>
+    <button class="btn-crear" (click)="crearEvento()">
+      ➕ Crear Nuevo Evento
+    </button>
   </div>
 
-  <div *ngIf="eventos.length === 0" class="empty-state">
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="loading" class="empty-state">
     <p>⏳ Cargando eventos...</p>
+  </div>
+
+  <div *ngIf="eventos.length === 0 && !loading" class="empty-state">
+    <p>No hay eventos disponibles. ¡Crea uno!</p>
   </div>
 
   <div *ngIf="eventos.length > 0" class="eventos-accordion">
@@ -13,10 +26,9 @@
       *ngFor="let e of eventos"
       class="evento-card"
       [class.expanded]="eventoExpandido === e.id"
-      (click)="toggleEvento(e.id)"
     >
       <!-- Header colapsable -->
-      <div class="evento-header">
+      <div class="evento-header" (click)="toggleEvento(e.id)">
         <div class="evento-titulo">
           <h3>{{ e.nombre }}</h3>
           <span class="evento-genero">{{ e.genero }}</span>
@@ -59,8 +71,11 @@
         <div class="evento-acciones">
           <button class="btn-comprar" (click)="irAComprar()">🎫 Comprar Entradas</button>
           <button class="btn-favorito" (click)="irAFavoritos()">❤️ Añadir a Favoritos</button>
+          <button class="btn-editar" (click)="editarEvento(e.id, $event)">✏️ Editar</button>
+          <button class="btn-eliminar" (click)="borrarEvento(e.id, $event)">🗑️ Eliminar</button>
         </div>
       </div>
     </div>
   </div>
 </div>
+

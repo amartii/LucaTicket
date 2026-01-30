@@ -1,0 +1,168 @@
+<div class="form-container">
+  <h2>{{ isEditing ? 'Editar Evento' : 'Crear Nuevo Evento' }}</h2>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <form [formGroup]="eventoForm" (ngSubmit)="onSubmit()" class="event-form">
+    <div class="form-group">
+      <label for="nombre">Nombre:</label>
+      <input
+        type="text"
+        id="nombre"
+        formControlName="nombre"
+        placeholder="Nombre del evento"
+        [class.is-invalid]="nombreControl?.invalid && nombreControl?.touched"
+      />
+      <span class="error" *ngIf="nombreControl?.invalid && nombreControl?.touched">
+        <span *ngIf="nombreControl?.errors?.['required']">El nombre es obligatorio</span>
+        <span *ngIf="nombreControl?.errors?.['minlength']">Mínimo 3 caracteres</span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion">Descripción:</label>
+      <textarea
+        id="descripcion"
+        formControlName="descripcion"
+        placeholder="Descripción del evento"
+        rows="4"
+        [class.is-invalid]="descripcionControl?.invalid && descripcionControl?.touched"
+      ></textarea>
+      <span class="error" *ngIf="descripcionControl?.invalid && descripcionControl?.touched">
+        <span *ngIf="descripcionControl?.errors?.['required']">La descripción es obligatoria</span>
+        <span *ngIf="descripcionControl?.errors?.['minlength']">Mínimo 10 caracteres</span>
+      </span>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="fechaEvento">Fecha:</label>
+        <input
+          type="date"
+          id="fechaEvento"
+          formControlName="fechaEvento"
+          [class.is-invalid]="fechaEventoControl?.invalid && fechaEventoControl?.touched"
+        />
+        <span class="error" *ngIf="fechaEventoControl?.invalid && fechaEventoControl?.touched">
+          La fecha es obligatoria
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="horaEvento">Hora:</label>
+        <input
+          type="time"
+          id="horaEvento"
+          formControlName="horaEvento"
+          [class.is-invalid]="horaEventoControl?.invalid && horaEventoControl?.touched"
+        />
+        <span class="error" *ngIf="horaEventoControl?.invalid && horaEventoControl?.touched">
+          La hora es obligatoria
+        </span>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="precioMinimo">Precio Mínimo:</label>
+        <input
+          type="number"
+          id="precioMinimo"
+          formControlName="precioMinimo"
+          placeholder="0.00"
+          step="0.01"
+          [class.is-invalid]="precioMinimoControl?.invalid && precioMinimoControl?.touched"
+        />
+        <span class="error" *ngIf="precioMinimoControl?.invalid && precioMinimoControl?.touched">
+          Precio mínimo válido requerido
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="precioMaximo">Precio Máximo:</label>
+        <input
+          type="number"
+          id="precioMaximo"
+          formControlName="precioMaximo"
+          placeholder="0.00"
+          step="0.01"
+          [class.is-invalid]="precioMaximoControl?.invalid && precioMaximoControl?.touched"
+        />
+        <span class="error" *ngIf="precioMaximoControl?.invalid && precioMaximoControl?.touched">
+          Precio máximo válido requerido
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="localidad">Localidad:</label>
+      <input
+        type="text"
+        id="localidad"
+        formControlName="localidad"
+        placeholder="Localidad/Ciudad"
+        [class.is-invalid]="localidadControl?.invalid && localidadControl?.touched"
+      />
+      <span class="error" *ngIf="localidadControl?.invalid && localidadControl?.touched">
+        La localidad es obligatoria
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="genero">Género:</label>
+      <input
+        type="text"
+        id="genero"
+        formControlName="genero"
+        placeholder="Género/Categoría"
+        [class.is-invalid]="generoControl?.invalid && generoControl?.touched"
+      />
+      <span class="error" *ngIf="generoControl?.invalid && generoControl?.touched">
+        El género es obligatorio
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="recinto">Recinto:</label>
+      <input
+        type="text"
+        id="recinto"
+        formControlName="recinto"
+        placeholder="Lugar/Recinto"
+        [class.is-invalid]="recintoControl?.invalid && recintoControl?.touched"
+      />
+      <span class="error" *ngIf="recintoControl?.invalid && recintoControl?.touched">
+        El recinto es obligatorio
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="foto">URL de la Foto:</label>
+      <input
+        type="text"
+        id="foto"
+        formControlName="foto"
+        placeholder="https://ejemplo.com/imagen.jpg"
+      />
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="submit"
+        [disabled]="eventoForm.invalid || loading"
+        class="btn btn-primary"
+      >
+        {{ loading ? 'Guardando...' : (isEditing ? 'Actualizar' : 'Crear') }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="volver()"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

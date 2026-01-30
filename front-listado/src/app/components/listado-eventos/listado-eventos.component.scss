@@ -22,10 +22,19 @@ $border-color: #2a3447;
 
 /* Header */
 .header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 3rem;
   padding-bottom: 2rem;
   border-bottom: 2px solid $accent-primary;
+  flex-wrap: wrap;
+  gap: 2rem;
+
+  .header-title {
+    flex: 1;
+    min-width: 300px;
+  }
 
   h2 {
     font-size: 2.5rem;
@@ -42,6 +51,40 @@ $border-color: #2a3447;
     margin-bottom: 0;
     font-weight: 300;
   }
+
+  .btn-crear {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    white-space: nowrap;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(40, 167, 69, 0.5);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 2rem;
+  border-left: 4px solid #f5c6cb;
 }
 
 /* Estado vacío */
@@ -272,13 +315,15 @@ $border-color: #2a3447;
 }
 
 .btn-comprar,
-.btn-favorito {
+.btn-favorito,
+.btn-editar,
+.btn-eliminar {
   flex: 1;
-  min-width: 150px;
+  min-width: 120px;
   padding: 0.8rem 1.5rem;
   border: none;
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -310,6 +355,36 @@ $border-color: #2a3447;
   &:hover {
     background: rgba(74, 124, 255, 0.1);
     transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-editar {
+  background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+  color: #333;
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 193, 7, 0.5);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-eliminar {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(220, 53, 69, 0.5);
   }
 
   &:active {
