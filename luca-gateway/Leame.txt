@@ -1,0 +1,66 @@
+=================
+GATEWAY
+=================
+
+Incluiremos un gateway
+en vez de llamar a los micro desde el puerto 7777, 8888, etc. lo redirigiremos desde el 8080
+Antiguamente se hacia con Netflix Zuul
+
+============
+DEPENDENCIAS
+============
+Config client
+Eureka Cliente
+Gateway      spring-cloud-starter-gateway
+
+
+Pasos
+1) Crear archivo configuracion GitHub
+2) Traer dependencias
+3) Configurar el main
+
+Ahora todas las peticiones llevan el 8081 delante 
+
+
+============
+ARCHIVO GIT
+============
+
+server:
+  port: 8080
+spring:
+  cloud: 
+   gateway: 
+    routes:
+      - id: catalog
+        uri: lb://catalog/        <---- Está usando SpringCloud LoadBalancerClient para resolver el nombre
+                                  https://cloud.spring.io/spring-cloud-gateway/reference/html/#the-loadbalancerclient-filter
+                                  Especifica que será ahi donde salte cuando la ruta sea correcta
+                                  Buscará en el servidor de Eureka los servicios con el nombre escrito a continuacion
+                                  CATALOG es el nombre con que se ha registrado en Eureka
+                                  Y si se puede, se balancearán
+        predicates:
+          - Path=/product/**      <---- Es como la condicion. Salto a la ruta si encuentro eso
+      - id: cart
+        uri: lb://cart/           <---- Está usando SpringCloud LoadBalancerClient para resolver el nombre
+        predicates:
+          - Path=/cart/**
+          
+
+========
+MAS INFO
+========        
+http://www.profesor-p.com/spring/gateway/      
+
+
+=================================
+ELEMENTOS A AÑADIR. MEJORAS
+=================================
+
+filters. En la configuración  
+Bean RouteLocator para hacer un bean definiendo rutas en el programa   
+Filtros hystrix que lleve a una URL de fallo si hay problemas
+bean GlobalFilter para añadir logs
+Probar balanceo de carga. 
+	Se deben permitir multiples instancias de un microservicio (eureka.instance.instance-id)
+	No fijar el puerto individual (Eureka les asignara uno) y accedemos desde el gateway

@@ -1,0 +1,30 @@
+server:
+  port: 8282
+
+spring:
+  application:
+    name: luca-gateway
+  config:
+    import: "optional:configserver:"
+  cloud:
+    gateway:
+      routes:
+        - id: eventos-service
+          uri: lb://eventos-service
+          predicates:
+            - Path=/eventos/**
+          filters:
+            - StripPrefix=0
+        - id: compra-service
+          uri: lb://compra-service
+          predicates:
+            - Path=/pasarela/**
+          filters:
+            - StripPrefix=0
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true

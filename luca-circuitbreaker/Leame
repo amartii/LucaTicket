@@ -1,0 +1,40 @@
+=================
+CLIENTE 02: CART (CIRCUIT BREAKER)
+=================
+
+Es el mismo Ejercicio que el 19d
+Solo lo ejecutaremos apra ver el efecto de Circuit breaker
+	Se ha añadido Circuit Breaker
+		- Dependencias
+		- Cambios en el Controller con @CircuitBreaker para los métodos
+		- Método adicional por cada CircuitBreaker
+		- Configuracion especial
+
+
+============
+Dependencias
+============
+
+Es necesario Actuator, AOP y resilience
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+    </dependency>
+
+========
+Pruebas
+========
+Parar el microservicio 19c (Catalogo)
+
+Para obtener los carritos de prueba
+	(GET) localhost:8889/cart/   >>> Deberia funcionar sin problemas xq tira de la BBDD
+
+Para incluir nuevos elementos
+	(POST) localhost:8889/cart/1/add?idProduct=1		>>> Deberia fallar pero da un mensaje personalizado
+	(POST) localhost:8889/cart/1/add?idProduct=2&qt=4	>>> Deberia fallar pero da un mensaje personalizado
+	
+	En el 19d da un fallo si el micro 19c esta parado
+	
+	
+
